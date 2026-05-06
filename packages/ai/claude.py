@@ -30,3 +30,14 @@ class ClaudeProvider(BaseLLMProvider):
                 delta = event.delta.text
                 if delta:
                     yield delta
+
+    async def chat(self, message: str) -> str:
+        response = await self.client.messages.create(
+            model=settings.CLAUDE_MODEL,
+            max_tokens=1024,
+            messages=[
+                {"role": "user", "content": message}
+            ],
+        )
+
+        return response.content[0].text

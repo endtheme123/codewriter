@@ -1,6 +1,7 @@
 .env
 to_be_ignored
 ai_learn
+env/
 __pycache__/
 *.pyc
 *.pyo

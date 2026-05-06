@@ -31,7 +31,10 @@ class Settings(BaseSettings):
     # OpenAI
     OPENAI_API_KEY: str | None = None
     OPENAI_MODEL: str = "gpt-4o-mini"
-
+    
+    # vLLM
+    VLLM_BASE_URL: str | None = None
+    VLLM_MODEL: str | None = None
     # Claude
     ANTHROPIC_API_KEY: str | None = None
     CLAUDE_MODEL: str = "claude-3-haiku-20240307"

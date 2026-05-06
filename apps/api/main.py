@@ -7,6 +7,7 @@ from config import settings
 from packages.ai.claude import ClaudeProvider
 from packages.ai.dummy import MockProvider
 from packages.ai.base import BaseLLMProvider
+from packages.ai.vllm import VLLMProvider
 
 
 app = FastAPI()
@@ -19,8 +20,8 @@ logger = get_logger("main")
 def get_provider() -> BaseLLMProvider:
     if settings.LLM_PROVIDER == "claude":
         return ClaudeProvider()
-    # elif settings.LLM_PROVIDER == "openai":
-    #     return OpenAIProvider()
+    elif settings.LLM_PROVIDER == "vllm":
+        return VLLMProvider()
     elif settings.LLM_PROVIDER == "mock":
         return MockProvider()
     else:
@@ -34,7 +35,7 @@ async def stream_chat(message: str) -> AsyncGenerator[str, None]:
 
     yield "data: [DONE]\n\n"
 
-@app.post("/chat")
+@app.post("/chat_stream")
 async def chat(request: Request):
     body = await request.json()
     message = body.get("message", "")
@@ -45,3 +46,14 @@ async def chat(request: Request):
         stream_chat(message),
         media_type="text/event-stream"
     )
+
+@app.post("/chat")
+async def chat(request: Request):
+    body = await request.json()
+    message = body.get("message", "")
+
+    provider = get_provider()
+
+    result = await provider.chat(message)
+
+    return {"response": result}
