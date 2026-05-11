@@ -39,6 +39,12 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: str | None = None
     CLAUDE_MODEL: str = "claude-3-haiku-20240307"
 
+
+    # LiteLLM
+    LITELLM_MODEL: str = "gpt-4o-mini"
+    LITELLM_API_KEY: str | None = None
+    LITELLM_API_BASE: str | None = None
+    
     # 2. Configure to read from a .env file
     model_config = SettingsConfigDict(
         env_file=".env", 

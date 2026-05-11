@@ -3,11 +3,14 @@ from config import settings
 from packages.ai.claude import ClaudeProvider
 from packages.ai.vllm import VLLMProvider
 from packages.ai.dummy import MockProvider
+from packages.ai.litellm import LiteLLMProvider
 
 from knowledge_base.embedding.st_embed import SentenceTransformerEmbedder
 from knowledge_base.vector_db.faiss import FaissVectorStore
 from knowledge_base.main import KnowledgeBase
 from knowledge_base.ingest import KnowledgeIngestor
+
+from database.excel import ExcelRiskRepository
 
 from packages.service.chat_service import ChatService
 
@@ -19,15 +22,22 @@ def create_provider():
     elif settings.LLM_PROVIDER == "vllm":
         return VLLMProvider()
 
+    elif settings.LLM_PROVIDER == "litellm":
+        return LiteLLMProvider()
+
     elif settings.LLM_PROVIDER == "mock":
         return MockProvider()
 
     raise ValueError("Unsupported provider")
 
 
+
 # -------------------------
 # SINGLETONS
 # -------------------------
+
+
+db = ExcelRiskRepository(file_path="/home/nguyen.ha.huy.hoang/git/excel_repo/test_data.xlsx")
 
 provider = create_provider()
 
